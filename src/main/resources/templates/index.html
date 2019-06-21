@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="/css/materialize.css">
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1253881_arysaevf11b.css">
+  <link href="/css/roboto.css" rel="stylesheet">
+  <script type="text/javascript" src="/js/jquery.js"></script>
+  <script type="text/javascript" src="/js/materialize.js"></script>
+  <style>
+    p, h1, h2, h3, h4, h5, h6, header,
+    div, a, span, i{
+      font-family: 'Roboto Mono', monospace, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif, "微软雅黑";
+    }
+    .result-badge {
+      width: 36px;
+      height: 36px;
+      display: inline-block;
+      color: #fefefe;
+      text-align: center;
+      line-height: 36px;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 16px;
+    }
+    .result-badge i {
+      font-size: 18px;
+    }
+    .nav-wrapper ul li a i {
+      font-size: 1.5em;
+    }
+    .nav-wrapper .brand-logo i {
+      margin-left: .5em;
+      font-size: 1.5rem;
+    }
+
+    .flow-text {
+      font-weight: 300;
+    }
+    @media only screen and (max-width: 992px) {
+      .nav-wrapper .brand-logo {
+        margin: 0;
+        font-size: 1rem;
+      }
+      .nav-wrapper .brand-logo i.iconfont {
+        margin-left: 0em;
+        margin-right: 0;
+      }
+    }
+
+    @media only screen and (max-width: 320px) {
+      .nav-wrapper .brand-logo {
+        margin: 0;
+        font-size: .3rem;
+      }
+      .nav-wrapper .brand-logo i.iconfont {
+        margin-left: 0em;
+        margin-right: 0;
+        font-size: 1rem;
+      }
+    }
+  </style>
+  <title>MNIST</title>
+</head>
+<body>
+  <nav class="blue darken-1">
+    <div class="nav-wrapper">
+      <a href="/" class="brand-logo"><i class="iconfont icon-iconzhengli_shouxieqianpi"></i><span>HANDWRITE RECOGNIZE</span></a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li data-tooltip="Visit blog"><a href="http://blog.csdn.net/zouzhipeng1717" target="_blank" title=""><i class="iconfont icon-ego-blog"></i></a></li>
+        <li data-tooltip="Visit iSELab in NJU"><a href="http://www.iselab.cn" target="_blank"><i class="iconfont icon-lab"></i></a></li>
+        <li data-tooltip="Visit project in Github"><a href="https://github.com/Frank17" target="_blank"><i class="iconfont icon-github"></i></a></li>
+      </ul>
+    </div>
+  </nav>
+  <ul id="slide-out" class="sidenav">
+      <li><div class="user-view">
+        <div class="background">
+        </div>
+        <a href="#name"><span class="white-text name" >John Doe</span></a>
+        <a href="#email"><span class="white-text email">jdandturk@gmail.com</span></a>
+      </div></li>
+      <li><a href="#!"><i class="material-icons">cloud</i>First Link With Icon</a></li>
+      <li><a href="#!">Second Link</a></li>
+      <li><div class="divider"></div></li>
+      <li><a class="subheader">Subheader</a></li>
+      <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>
+    </ul>
+    <!-- <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a> -->
+  <div class="container">
+    <div style="width: 100%; margin-top: 2rem;">
+      <p class="flow-text" style="text-align: justify;">
+        You can draw a number in the canvas below as you can, the number is ranged from <i>0</i> to <i>9</i>. We don't support the alpha character now, maybe we will support next model.
+        After that you can trigger "Recognize" button to get your number, and don't forget correcting the wrong results because we need your help to
+        improve our models to make more precise decisions. If you like this, you could visit the git page to star our project.
+      </p>
+      <canvas id="number-canvas" width="280px" height="280px" style="margin: 0 auto;display: block;"></canvas>
+    </div>
+    <script>
+      var canvas = $('#number-canvas')[0].getContext('2d');
+      canvas.strokeStyle = "white";//线条的颜色
+      canvas.lineWidth = 10;//线条粗细
+      canvas.fillStyle = 'black'
+      canvas.fillRect(0, 0, 280, 280);
+
+      var mousedown_touchstart = function(event) {
+        event.preventDefault()
+        /*开始绘制*/
+        canvas.beginPath();
+        /*设置动画绘制起点坐标*/
+        var point = $('#number-canvas').offset()
+        canvas.moveTo(event.pageX - point.left, event.pageY - point.top);
+        var mousemove_touchmove = function(event) {
+          /*设置下一个点坐标*/
+          canvas.lineTo(event.pageX-point.left, event.pageY-point.top);
+          /*画线*/
+          canvas.stroke();
+        }
+        $('#number-canvas').on('mousemove', mousemove_touchmove).on('touchmove', mousemove_touchmove);
+      }
+
+      $('#number-canvas').on('mousedown', mousedown_touchstart).on('mouseup', function() {
+        $('#number-canvas').off('mousemove');
+      }).on('touchstart', mousedown_touchstart).on('mouseleave', function() {
+        $('#number-canvas').off('mousemove');
+      }).on('touchend', function () {
+        $('#number-canvas').off('touchmove')
+      }).on('touchcancel', function () {
+        $('#number-canvas').off('touchmove')
+      })
+      ;
+      document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.sidenav');
+        var options = {
+          edge: 'left',
+          draggable: false,
+        }
+        var instances = M.Sidenav.init(elems, options);
+      });
+    </script>
+    <div style="text-align: center;" class="center-block valign-wrapper">
+      <span><span class="result-badge blue" style="display: none; opacity: 0;"><i class="iconfont"></i></span></span>
+    </div>
+    <div class="row center-align" style="margin-top: 16px;">
+      <a class="btn waves-effect waves-light btn-recognize">Recognize</a>
+    </div>
+    <div class="container">
+      <p class="flow-text">
+        If the result is not correct, you can help us correct it by complete forms below, just one step, we need you!
+      </p>
+      <div class="row">
+        <div class="col s12 m10 offset-m1 l8 offset-l2">
+          <div class="row">
+            <div class="input-field col s12">
+              <input type="number" class="validate" id="input-result">
+              <label for="input-result">Number of this image</label>
+            </div>
+          </div>
+          <div class="center-align">
+            <a class="btn btn-block materialize-red waves-effect waves-light " id="result-submit">Submit Result</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-copyright">
+    Powered by Zhipeng Zou
+  </div>
+  <script>
+
+    $('.btn-recognize').on('click', function (e1) {
+      var container = $('#number-canvas')[0]
+      var base64 = container.toDataURL("image/png")
+      $(e1.target).addClass('disabled')
+      $.ajax('/handwrite', {
+        method: 'post',
+        data: JSON.stringify({
+          base64Encoded: base64
+        }),
+        contentType: 'application/json',
+        dataType: 'json',
+        success: function (res) {
+          console.log(res)
+          var imgName = res.data
+          $('.result-badge').css('display', 'block').animate({opacity: '1'}, 500)
+          $('#result-submit').on('click', function (e1) {
+            $.ajax('/adjust', {
+              method: 'POST',
+              contentType: 'application/json',
+              dataType: 'json',
+              data: JSON.stringify({
+                name: imgName,
+                label: $('#input-result').val() + ""
+              }),
+              success: function (e) {
+                var t = $('.result-badge .iconfont')
+                for (var i = 0; i <= 9; i++) {
+                  if (i == 0)
+                    t.removeClass('icon-icon-test')
+                  else
+                    t.removeClass('icon-icon-test' + i)
+                }
+                var val = parseInt(e.data.label) - 1
+                if (val > 0)
+                  t.addClass('icon-icon-test' + val)
+                else
+                  t.addClass('icon-icon-test')
+                $('input').val("")
+                $('input').blur()
+                $(e1.target).off('click')
+              },
+              fail: function (e) {
+
+              },
+              error: function (e) {
+
+              }
+            })
+          })
+          $.ajax('/recognize', {
+            method: 'POST',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify({
+              imageName: imgName
+            }),
+            success: function (e) {
+              $(e1.target).removeClass('disabled')
+              console.log(e.data)
+              var t = $('.result-badge .iconfont')
+              for (var i = 0; i <= 9; i++) {
+                if (i == 0)
+                  t.removeClass('icon-icon-test')
+                else
+                  t.removeClass('icon-icon-test' + i)
+              }
+              var val = e.data[0] - 1
+              if (val > 0)
+                t.addClass('icon-icon-test' + val)
+              else
+                t.addClass('icon-icon-test')
+            },
+            fail: function (e) {
+              $(e1.target).removeClass('disabled')
+            },
+            error: function (e) {
+              $(e1.target).removeClass('disabled')
+            }
+          })
+        },
+        fail: function (e) {
+          console.log(e)
+          $(e1.target).removeClass('disabled')
+        },
+        error: function (e) {
+          console.log(e)
+          $(e1.target).removeClass('disabled')
+        }
+      })
+    })
+    var tooltips = document.querySelectorAll('li[data-tooltip]')
+    var options = {
+
+    }
+    M.Tooltip.init(tooltips, options)
+  </script>
+</body>
+</html>

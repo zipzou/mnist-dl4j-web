@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    url: jdbc:h2:file:~/IdeaProjects/mnist-dl4j-web/handwritedata
+    driver-class-name: org.h2.Driver
+    username: root
+    password: root
+    platform: org.hibernate.dialect.H2Dialect
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        trace: false
