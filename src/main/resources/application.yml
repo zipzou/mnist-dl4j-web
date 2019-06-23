@@ -16,3 +16,7 @@ spring:
       path: /h2-console
       settings:
         trace: false
+
+logging:
+  file: handwrite.log
+  path: ~/logs

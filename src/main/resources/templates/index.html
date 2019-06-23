@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
   <link rel="stylesheet" href="/css/materialize.css">
-  <link rel="stylesheet" href="//at.alicdn.com/t/font_1253881_arysaevf11b.css">
+  <meta name="author" content="zhipengzou, zhipengnju_at_gmail_dot_com"/>
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1253881_n8mejd2lbsr.css">
   <link href="/css/roboto.css" rel="stylesheet">
   <script type="text/javascript" src="/js/jquery.js"></script>
   <script type="text/javascript" src="/js/materialize.js"></script>
@@ -33,11 +34,17 @@
     }
     .nav-wrapper .brand-logo i {
       margin-left: .5em;
-      font-size: 1.5rem;
+      font-size: 2.1rem;
     }
 
     .flow-text {
       font-weight: 300;
+    }
+    .footer {
+      height: 80px;
+      text-align: center; color: #fefefe;
+      line-height: 84px;
+      margin-top: 32px;
     }
     @media only screen and (max-width: 992px) {
       .nav-wrapper .brand-logo {
@@ -47,6 +54,7 @@
       .nav-wrapper .brand-logo i.iconfont {
         margin-left: 0em;
         margin-right: 0;
+        font-size: 1.5rem;
       }
     }
 
@@ -165,7 +173,7 @@
       </div>
     </div>
   </div>
-  <div class="footer-copyright">
+  <div class="footer-copyright grey darken-3 footer">
     Powered by Zhipeng Zou
   </div>
   <script>
@@ -206,7 +214,7 @@
                 if (val > 0)
                   t.addClass('icon-icon-test' + val)
                 else
-                  t.addClass('icon-icon-test')
+                  t.addClass('icon-icon-test9')
                 $('input').val("")
                 $('input').blur()
                 $(e1.target).off('click')
